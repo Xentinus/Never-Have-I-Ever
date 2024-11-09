@@ -1,0 +1,47 @@
+[
+    {
+      "id": 1,
+      "text": "Soha nem ettem csigát",
+      "categories": [1, 4]
+    },
+    {
+      "id": 2,
+      "text": "Soha nem ugrottam ejtőernyővel",
+      "categories": [1, 5]
+    },
+    {
+      "id": 3,
+      "text": "Soha nem voltam külföldön",
+      "categories": [1, 5]
+    },
+    {
+      "id": 4,
+      "text": "Soha nem csaltam meg a páromat",
+      "categories": [2]
+    },
+    {
+      "id": 5,
+      "text": "Soha nem voltam szerelmes első látásra",
+      "categories": [2]
+    },
+    {
+      "id": 6,
+      "text": "Soha nem mentem randira vakrandin",
+      "categories": [2]
+    },
+    {
+      "id": 7,
+      "text": "Soha nem késtem el a munkából",
+      "categories": [3]
+    },
+    {
+      "id": 8,
+      "text": "Soha nem aludtam el munka közben",
+      "categories": [3]
+    },
+    {
+      "id": 9,
+      "text": "Soha nem hazudtam a főnökömnek",
+      "categories": [3]
+    }
+  ]

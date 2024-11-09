@@ -1,0 +1,22 @@
+[
+    {
+      "id": 1,
+      "name": "Általános"
+    },
+    {
+      "id": 2,
+      "name": "Kapcsolatok"
+    },
+    {
+      "id": 3,
+      "name": "Munka"
+    },
+    {
+      "id": 4,
+      "name": "Ételek"
+    },
+    {
+      "id": 5,
+      "name": "Utazás"
+    }
+  ]

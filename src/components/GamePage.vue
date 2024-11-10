@@ -1,52 +1,52 @@
 <template>
   <div class="flex flex-col items-center justify-center min-h-screen p-4">
-    <h2 class="text-2xl md:text-3xl font-bold mb-6 text-center">{{ currentQuestion.text }}</h2>
-    <div class="relative mb-6">
-      <svg class="w-32 h-32" viewBox="0 0 100 100">
-        <circle
-          cx="50"
-          cy="50"
-          r="45"
-          fill="none"
-          stroke="#4B5563"
-          stroke-width="10"
-        />
-        <circle
-          cx="50"
-          cy="50"
-          r="45"
-          fill="none"
-          stroke="#3B82F6"
-          stroke-width="10"
-          :stroke-dasharray="circumference"
-          :stroke-dashoffset="dashOffset"
-          transform="rotate(-90 50 50)"
-        />
-      </svg>
-      <span class="absolute inset-0 flex items-center justify-center text-3xl font-bold">
-        {{ Math.ceil(timeLeft) }}
-      </span>
+    <h2 class="text-2xl md:text-3xl font-bold mb-12 text-center">{{ currentQuestion.text }}</h2>
+    <div class="relative mb-12">
+      <div class="countdown-wrapper" :class="{ 'urgent': timeLeft <= 6 }">
+        <div class="countdown-ring">
+          <svg class="w-32 h-32" viewBox="0 0 100 100">
+            <circle
+              class="countdown-ring-bg"
+              cx="50"
+              cy="50"
+              r="45"
+            />
+            <circle
+              class="countdown-ring-progress"
+              :class="{ 'urgent': timeLeft <= 6 }"
+              cx="50"
+              cy="50"
+              r="45"
+              :stroke-dasharray="circumference"
+              :stroke-dashoffset="dashOffset"
+            />
+          </svg>
+          <span class="countdown-number" :class="{ 'urgent': timeLeft <= 6 }">
+            {{ Math.ceil(timeLeft) }}
+          </span>
+        </div>
+      </div>
     </div>
     <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
       <button 
         v-if="!isPaused"
         @click="pauseTimer"
-        class="bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded-full w-64 text-xl focus:ring-2 focus:ring-white focus:outline-none mx-auto sm:mx-0">
+        class="modern-button yellow w-64">
         Megállítás
       </button>
       <button 
         v-if="isPaused"
         @click="resumeTimer"
-        class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full w-64 text-xl focus:ring-2 focus:ring-white focus:outline-none mx-auto sm:mx-0">
+        class="modern-button green w-64">
         Folytatás
       </button>
       <button
         @click="exitGame"
-        class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full w-64 text-xl focus:ring-2 focus:ring-white focus:outline-none mx-auto sm:mx-0">
+        class="modern-button transparent w-64">
         Kilépés
       </button>
     </div>
-    <div class="absolute bottom-4 right-4 text-sm">
+    <div class="absolute bottom-4 right-4 text-bold">
       {{ currentQuestionIndex + 1 }} / {{ totalQuestions }}
     </div>
     <AppFooter />

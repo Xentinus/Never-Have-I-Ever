@@ -1,21 +1,24 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import categoriesData from '@/assets/categories.json'
-import questionsData from '@/assets/questions.json'
+import axios from 'axios'
 
 Vue.use(Vuex)
+
+const API_URL = 'http://localhost:3000'
 
 export default new Vuex.Store({
   state: {
     countdownTime: 20,
-    categories: categoriesData,
-    questions: questionsData,
+    categories: [],
     selectedCategories: [],
     gameQuestions: []
   },
   mutations: {
     setCountdownTime(state, time) {
       state.countdownTime = time
+    },
+    setCategories(state, categories) {
+      state.categories = categories
     },
     toggleCategory(state, categoryId) {
       const index = state.selectedCategories.indexOf(categoryId)
@@ -26,23 +29,34 @@ export default new Vuex.Store({
       }
     },
     setGameQuestions(state, questions) {
-      state.gameQuestions = questions
+      state.gameQuestions = questions.map(text => ({ text }))
     }
   },
   actions: {
-    prepareGameQuestions({ commit, state }) {
-      const selectedQuestions = state.questions.filter(question => 
-        question.categories.some(categoryId => state.selectedCategories.includes(categoryId))
-      )
-      const shuffledQuestions = [...selectedQuestions].sort(() => Math.random() - 0.5)
-      commit('setGameQuestions', shuffledQuestions)
+    async fetchCategories({ commit }) {
+      try {
+        const response = await axios.get(`${API_URL}/categories`)
+        commit('setCategories', response.data)
+      } catch (error) {
+        console.error('Hiba a kategóriák betöltésekor:', error)
+      }
+    },
+    async prepareGameQuestions({ commit, state }) {
+      try {
+        const response = await axios.get(`${API_URL}/questions/categories`, {
+          params: {
+            categoryIds: state.selectedCategories.join(',')
+          }
+        })
+        commit('setGameQuestions', response.data)
+      } catch (error) {
+        console.error('Hiba a kérdések betöltésekor:', error)
+      }
     }
   },
   getters: {
     selectedQuestionsCount: (state) => {
-      return state.questions.filter(question => 
-        question.categories.some(categoryId => state.selectedCategories.includes(categoryId))
-      ).length
+      return state.selectedCategories.length > 0 ? 1 : 0
     },
     gameQuestions: (state) => state.gameQuestions
   }

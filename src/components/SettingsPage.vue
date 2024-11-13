@@ -27,7 +27,7 @@
         <button
           @click="returnToStartup"
           class="modern-button transparent">
-          Vissza a főoldalra
+          <i class="fas fa-arrow-left mr-2"></i>Vissza a főoldalra
         </button>
       </div>
       <AppFooter />

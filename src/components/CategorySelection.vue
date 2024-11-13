@@ -35,7 +35,7 @@
         ref="returnButton"
         class="modern-button transparent w-full sm:w-96 md:w-[32rem]"
       >
-        Vissza a főoldalra
+      <i class="fas fa-arrow-left mr-2"></i>Vissza a főoldalra
       </button>
     </div>
     <AppFooter />

@@ -5,6 +5,7 @@ import CategorySelection from '@/components/CategorySelection.vue'
 import GamePage from '@/components/GamePage.vue'
 import SettingsPage from '@/components/SettingsPage.vue'
 import CategoriesManager from '@/components/CategoriesManager.vue'
+import QuestionsManager from '@/components/QuestionsManager.vue'
 
 Vue.use(VueRouter)
 
@@ -33,6 +34,11 @@ const routes = [
     path: '/categories-manager',
     name: 'CategoriesManager',
     component: CategoriesManager
+  },
+  {
+    path: '/questions-manager',
+    name: 'QuestionsManager',
+    component: QuestionsManager
   }
 ]
 

@@ -2,22 +2,31 @@
     <div class="flex flex-col items-center justify-center min-h-screen p-4 bg-wrapper">
       <h1 class="text-6xl md:text-8xl font-bold mb-2 neon-purple">NEVER</h1>
       <h2 class="text-4xl md:text-6xl font-bold mb-12">have I ever</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        <button
-          @click="startGame"
-          class="modern-button primary w-64 text-xl mx-auto">
-          Játék indítása
-        </button>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="md:col-span-2 flex justify-center">
+          <button
+            @click="startGame"
+            class="modern-button primary w-64 text-xl">
+            Játék indítása
+          </button>
+        </div>
         <button
           @click="openCategories"
           class="modern-button transparent w-64 text-xl mx-auto">
           Kategóriák kezelése
         </button>
         <button
-          @click="openSettings"
+          @click="openQuestions"
           class="modern-button transparent w-64 text-xl mx-auto">
-          Beállítások
+          Kérdések kezelése
         </button>
+        <div class="md:col-span-2 flex justify-center">
+          <button
+            @click="openSettings"
+            class="modern-button transparent w-64 text-xl">
+            Beállítások
+          </button>
+        </div>
       </div>
       <AppFooter />
     </div>
@@ -39,6 +48,9 @@
       },
       openCategories() {
         this.$router.push('/categories-manager')
+      },
+      openQuestions() {
+        this.$router.push('/questions-manager')
       }
     },
     computed: {

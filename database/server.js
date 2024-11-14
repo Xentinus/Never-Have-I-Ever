@@ -33,6 +33,24 @@ app.get('/categories', async (req, res) => {
   }
 });
 
+app.get('/categories/with-questions', async (req, res) => {
+  try {
+    const categories = await Category.findAll({
+      where: defaultWhere,
+      include: [{
+        model: Question,
+        attributes: [],
+        where: defaultWhere,
+        required: true
+      }],
+      distinct: true
+    });
+    res.json(categories);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 app.post('/categories', async (req, res) => {
   try {
     const category = await Category.create(req.body);

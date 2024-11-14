@@ -252,7 +252,7 @@ export default {
       deleteConfirmation: null,
       searchQuery: '',
       currentPage: 1,
-      itemsPerPage: 5,
+      itemsPerPage: 4,
       selectedQuestion: null,
     }
   },

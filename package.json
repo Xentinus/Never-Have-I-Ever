@@ -8,8 +8,8 @@
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "server": "node src/server.js",
-    "dev": "nodemon src/server.js"
+    "backend": "node ./database/server.js",
+    "frontend": "node ./server.js"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^6.6.0",
@@ -56,9 +56,8 @@
     "last 2 versions",
     "not dead"
   ],
-  "description": "```\r npm install\r ```",
   "main": "babel.config.js",
   "keywords": [],
-  "author": "",
+  "author": "Béla Kellner",
   "license": "ISC"
 }

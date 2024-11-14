@@ -170,7 +170,7 @@ export default {
       deleteConfirmation: null,
       searchQuery: '',
       currentPage: 1,
-      itemsPerPage: 4,
+      itemsPerPage: this.getItemsPerPage(),
       selectedCategory: null,
     }
   },
@@ -209,6 +209,10 @@ export default {
   },
   async created() {
     await this.loadCategories()
+    window.addEventListener('resize', this.handleResize);
+  },
+  beforeDestroy() {
+    window.removeEventListener('resize', this.handleResize);
   },
   methods: {
     async loadCategories() {
@@ -271,6 +275,21 @@ export default {
     },
     showActionModal(category) {
       this.selectedCategory = category;
+    },
+    getItemsPerPage() {
+      const width = window.innerWidth;
+      if (width >= 1024) { // lg breakpoint
+        return 9;
+      } else if (width >= 640) { // sm breakpoint
+        return 6;
+      }
+      return 4; // mobile
+    },
+    handleResize() {
+      this.itemsPerPage = this.getItemsPerPage();
+      if (this.currentPage > this.totalPages) {
+        this.currentPage = Math.max(1, this.totalPages);
+      }
     }
   }
 }

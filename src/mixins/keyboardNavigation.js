@@ -8,12 +8,12 @@ export const keyboardNavigation = {
   },
   mounted() {
     this.navigationButtons = Array.from(this.$el.getElementsByTagName('button'))
-    
+
     if (this.navigationButtons.length > 0) {
       this.navigationButtons[0].focus()
       this.isKeyboardNavigation = true
     }
-    
+
     this.$el.addEventListener('keydown', this.handleKeyNavigation)
     this.$el.addEventListener('mousedown', this.handleMouseDown)
     this.$el.addEventListener('focusout', this.handleFocusOut)
@@ -29,7 +29,7 @@ export const keyboardNavigation = {
         this.isKeyboardNavigation = false
         return
       }
-      
+
       event.preventDefault()
       if (this.navigationButtons[this.currentFocusIndex]) {
         this.navigationButtons[this.currentFocusIndex].focus()
@@ -46,7 +46,7 @@ export const keyboardNavigation = {
       this.isKeyboardNavigation = true
       this.navigationButtons = Array.from(this.$el.getElementsByTagName('button'))
       const totalButtons = this.navigationButtons.length
-      
+
       if (totalButtons === 0) return
 
       const currentRect = this.navigationButtons[this.currentFocusIndex].getBoundingClientRect()
@@ -121,17 +121,17 @@ export const keyboardNavigation = {
           }
           break
       }
-      
+
       if (event.key !== 'Enter' && event.key !== ' ' && this.navigationButtons[this.currentFocusIndex]) {
         this.navigationButtons[this.currentFocusIndex].focus()
       }
     },
     getRowLength() {
       if (this.navigationButtons.length === 0) return 1
-      
+
       const firstButton = this.navigationButtons[0]
       const firstRect = firstButton.getBoundingClientRect()
-      
+
       let rowLength = 0
       for (const button of this.navigationButtons) {
         const rect = button.getBoundingClientRect()
@@ -141,7 +141,7 @@ export const keyboardNavigation = {
           break
         }
       }
-      
+
       return rowLength || 1
     }
   }

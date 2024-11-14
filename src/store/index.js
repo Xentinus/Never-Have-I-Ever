@@ -35,7 +35,7 @@ export default new Vuex.Store({
   actions: {
     async fetchCategories({ commit }) {
       try {
-        const response = await axios.get(`${API_URL}/categories`)
+        const response = await axios.get(`${API_URL}/categories/with-questions`)
         commit('setCategories', response.data)
       } catch (error) {
         console.error('Hiba a kategóriák betöltésekor:', error)

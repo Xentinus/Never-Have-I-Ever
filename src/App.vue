@@ -12,7 +12,7 @@ export default {
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { name: 'description', content: 'Your app description here' },
+      { name: 'description', content: 'Never have i ever for friends' },
       { name: 'theme-color', content: '#111827' }
     ],
     link: [

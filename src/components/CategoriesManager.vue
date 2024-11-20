@@ -148,12 +148,16 @@
     </div>
 
     <AppFooter />
+
+    <div v-if="loading" class="loading-overlay">
+      <div class="loader"></div>
+    </div>
   </div>
 </template>
 
 <script>
 import AppFooter from '@/components/AppFooter.vue'
-import axios from 'axios'
+import api from '@/services/api'
 
 export default {
   name: 'CategoriesManager',
@@ -172,6 +176,7 @@ export default {
       currentPage: 1,
       itemsPerPage: this.getItemsPerPage(),
       selectedCategory: null,
+      loading: false,
     }
   },
   computed: {
@@ -217,24 +222,26 @@ export default {
   methods: {
     async loadCategories() {
       try {
-        const response = await axios.get('http://localhost:3000/categories')
-        this.categories = response.data
+        const response = await api.get('/categories');
+        this.categories = response.data;
       } catch (error) {
-        console.error('Hiba a kategóriák betöltésekor:', error)
+        console.error('Hiba a kategóriák betöltésekor:', error);
       }
     },
     async addCategory() {
-      if (!this.newCategory.trim()) return
-      
+      if (!this.newCategory.trim()) return;
+      this.loading = true;
       try {
-        await axios.post('http://localhost:3000/categories', {
+        await api.post('/categories', {
           name: this.newCategory.trim()
-        })
-        this.newCategory = ''
-        this.showAddModal = false
-        await this.loadCategories()
+        });
+        this.newCategory = '';
+        this.showAddModal = false;
+        await this.loadCategories();
       } catch (error) {
-        console.error('Hiba a kategória hozzáadásakor:', error)
+        console.error('Hiba a kategória hozzáadásakor:', error);
+      } finally {
+        this.loading = false;
       }
     },
     confirmDelete(category) {
@@ -242,12 +249,15 @@ export default {
       this.selectedCategory = null
     },
     async deleteCategory() {
+      this.loading = true;
       try {
-        await axios.delete(`http://localhost:3000/categories/${this.deleteConfirmation.id}`)
-        this.deleteConfirmation = null
-        await this.loadCategories()
+        await api.delete(`/categories/${this.deleteConfirmation.id}`);
+        this.deleteConfirmation = null;
+        await this.loadCategories();
       } catch (error) {
-        console.error('Hiba a kategória törlésekor:', error)
+        console.error('Hiba a kategória törlésekor:', error);
+      } finally {
+        this.loading = false;
       }
     },
     startEdit(category) {
@@ -256,17 +266,19 @@ export default {
       this.selectedCategory = null
     },
     async saveEdit() {
-      if (!this.editingText.trim()) return
-      
+      if (!this.editingText.trim()) return;
+      this.loading = true;
       try {
-        await axios.put(`http://localhost:3000/categories/${this.editingId}`, {
+        await api.put(`/categories/${this.editingId}`, {
           name: this.editingText.trim()
-        })
-        this.editingId = null
-        this.editingText = ''
-        await this.loadCategories()
+        });
+        this.editingId = null;
+        this.editingText = '';
+        await this.loadCategories();
       } catch (error) {
-        console.error('Hiba a kategória szerkesztésekor:', error)
+        console.error('Hiba a kategória szerkesztésekor:', error);
+      } finally {
+        this.loading = false;
       }
     },
     cancelEdit() {
@@ -326,5 +338,32 @@ export default {
     margin: 1rem;
     padding: 1rem;
   }
+}
+
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+}
+
+.loader {
+  border: 8px solid rgba(255, 255, 255, 0.3);
+  border-top: 8px solid #ffffff;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 </style>

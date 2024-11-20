@@ -225,12 +225,15 @@
       </div>
     </div>
     <AppFooter />
+    <div v-if="loading" class="loading-overlay">
+      <div class="loader"></div>
+    </div>
   </div>
 </template>
 
 <script>
 import AppFooter from '@/components/AppFooter.vue'
-import axios from 'axios'
+import api from '@/services/api'
 
 export default {
   name: 'QuestionsManager',
@@ -254,6 +257,7 @@ export default {
       currentPage: 1,
       itemsPerPage: 4,
       selectedQuestion: null,
+      loading: false,
     }
   },
   computed: {
@@ -292,33 +296,35 @@ export default {
   methods: {
     async loadQuestions() {
       try {
-        const response = await axios.get('http://localhost:3000/questions')
-        this.questions = response.data
+        const response = await api.get('/questions');
+        this.questions = response.data;
       } catch (error) {
-        console.error('Hiba a kérdések betöltésekor:', error)
+        console.error('Hiba a kérdések betöltésekor:', error);
       }
     },
     async loadCategories() {
       try {
-        const response = await axios.get('http://localhost:3000/categories')
-        this.categories = response.data
+        const response = await api.get('/categories');
+        this.categories = response.data;
       } catch (error) {
-        console.error('Hiba a kategóriák betöltésekor:', error)
+        console.error('Hiba a kategóriák betöltésekor:', error);
       }
     },
     async addQuestion() {
-      if (!this.newQuestion.text.trim()) return
-      
+      if (!this.newQuestion.text.trim()) return;
+      this.loading = true;
       try {
-        await axios.post('http://localhost:3000/questions', {
+        await api.post('/questions', {
           text: this.newQuestion.text.trim(),
           categoryIds: this.newQuestion.categoryIds
-        })
-        this.newQuestion = { text: '', categoryIds: [] }
-        this.showAddModal = false
-        await this.loadQuestions()
+        });
+        this.newQuestion = { text: '', categoryIds: [] };
+        this.showAddModal = false;
+        await this.loadQuestions();
       } catch (error) {
-        console.error('Hiba a kérdés hozzáadásakor:', error)
+        console.error('Hiba a kérdés hozzáadásakor:', error);
+      } finally {
+        this.loading = false;
       }
     },
     startEdit(question) {
@@ -328,19 +334,21 @@ export default {
       this.selectedQuestion = null
     },
     async saveEdit() {
-      if (!this.editingText.trim()) return
-      
+      if (!this.editingText.trim()) return;
+      this.loading = true;
       try {
-        await axios.put(`http://localhost:3000/questions/${this.editingId}`, {
+        await api.put(`/questions/${this.editingId}`, {
           text: this.editingText.trim(),
           categoryIds: this.editingCategoryIds
-        })
-        this.editingId = null
-        this.editingText = ''
-        this.editingCategoryIds = []
-        await this.loadQuestions()
+        });
+        this.editingId = null;
+        this.editingText = '';
+        this.editingCategoryIds = [];
+        await this.loadQuestions();
       } catch (error) {
-        console.error('Hiba a kérdés szerkesztésekor:', error)
+        console.error('Hiba a kérdés szerkesztésekor:', error);
+      } finally {
+        this.loading = false;
       }
     },
     cancelEdit() {
@@ -353,12 +361,15 @@ export default {
       this.selectedQuestion = null
     },
     async deleteQuestion() {
+      this.loading = true;
       try {
-        await axios.delete(`http://localhost:3000/questions/${this.deleteConfirmation.id}`)
-        this.deleteConfirmation = null
-        await this.loadQuestions()
+        await api.delete(`/questions/${this.deleteConfirmation.id}`);
+        this.deleteConfirmation = null;
+        await this.loadQuestions();
       } catch (error) {
-        console.error('Hiba a kérdés törlésekor:', error)
+        console.error('Hiba a kérdés törlésekor:', error);
+      } finally {
+        this.loading = false;
       }
     },
     showActionModal(question) {
@@ -447,5 +458,32 @@ input:checked + div {
 
 input:focus + div {
   box-shadow: 0 0 0 2px rgba(147, 51, 234, 0.3);
+}
+
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+}
+
+.loader {
+  border: 8px solid rgba(255, 255, 255, 0.3);
+  border-top: 8px solid #ffffff;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 </style> 

@@ -22,15 +22,15 @@
       </div>
 
       <!-- Lapozó -->
-      <div v-if="categories.length > itemsPerPage" class="mt-4 flex justify-between items-center modern-button transparent">
-        <div class="text-gray-200">
-          {{ startIndex + 1 }}-{{ endIndex }} / {{ categories.length }} kategória
+      <div v-if="categories.length > itemsPerPage" class="mt-4 flex flex-col md:flex-row justify-between items-center modern-button transparent">
+        <div class="text-gray-200 text-center md:text-left">
+          <span class="block md:inline">{{ startIndex + 1 }}-{{ endIndex }} / {{ categories.length }} kategória</span>
         </div>
-        <div class="flex gap-2">
+        <div class="flex gap-2 mt-2 md:mt-0">
           <button 
             @click="currentPage--"
             :disabled="currentPage === 1"
-            class="modern-button white p-1 disabled:opacity-50 text-sm"
+            class="modern-button white p-0.5 w-1/2 disabled:opacity-50 text-sm"
           >
             <i class="fas fa-chevron-left"></i>
           </button>
@@ -40,7 +40,7 @@
           <button 
             @click="currentPage++"
             :disabled="currentPage >= totalPages"
-            class="modern-button white p-1 disabled:opacity-50 text-sm"
+            class="modern-button white p-0.5 w-1/2 disabled:opacity-50 text-sm"
           >
             <i class="fas fa-chevron-right"></i>
           </button>
@@ -73,6 +73,11 @@
       </div>
     </div>
     <AppFooter />
+
+    <!-- Betöltő képernyő -->
+    <div v-if="isLoading" class="loading-overlay">
+      <div class="loader"></div>
+    </div>
   </div>
 </template>
 
@@ -87,6 +92,7 @@ export default {
     return {
       currentPage: 1,
       itemsPerPage: 6,
+      isLoading: false,
     }
   },
   computed: {
@@ -119,7 +125,9 @@ export default {
     AppFooter
   },
   async created() {
-    await this.$store.dispatch('fetchCategories')
+    this.isLoading = true;
+    await this.$store.dispatch('fetchCategories');
+    this.isLoading = false;
     // Várunk egy tick-et, hogy a DOM frissüljön
     this.$nextTick(() => {
       if (this.categories.length > 0) {
@@ -159,3 +167,32 @@ export default {
   }
 }
 </script>
+
+<style>
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.loader {
+  border: 8px solid rgba(255, 255, 255, 0.3);
+  border-top: 8px solid #ffffff;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+</style>

@@ -36,15 +36,15 @@
       </div>
 
       <!-- Lapozó -->
-      <div class="mt-8 flex justify-between items-center modern-button transparent">
-        <div class="text-gray-200">
-          {{ startIndex + 1 }}-{{ endIndex }} / {{ filteredCategories.length }} kategória
+      <div class="mt-8 flex flex-col md:flex-row justify-between items-center modern-button transparent">
+        <div class="text-gray-200 text-center md:text-left">
+          <span class="block md:inline">{{ startIndex + 1 }}-{{ endIndex }} / {{ filteredCategories.length }} kategória</span>
         </div>
-        <div class="flex gap-2">
+        <div class="flex gap-2 mt-2 md:mt-0">
           <button 
             @click="currentPage--"
             :disabled="currentPage === 1"
-            class="modern-button white p-1 disabled:opacity-50 text-sm"
+            class="modern-button white p-0.5 w-1/2 disabled:opacity-50 text-sm"
           >
             <i class="fas fa-chevron-left"></i>
           </button>
@@ -54,7 +54,7 @@
           <button 
             @click="currentPage++"
             :disabled="currentPage >= totalPages"
-            class="modern-button white p-1 disabled:opacity-50 text-sm"
+            class="modern-button white p-0.5 w-1/2 disabled:opacity-50 text-sm"
           >
             <i class="fas fa-chevron-right"></i>
           </button>
@@ -221,11 +221,14 @@ export default {
   },
   methods: {
     async loadCategories() {
+      this.loading = true;
       try {
         const response = await api.get('/categories');
         this.categories = response.data;
       } catch (error) {
         console.error('Hiba a kategóriák betöltésekor:', error);
+      } finally {
+        this.loading = false;
       }
     },
     async addCategory() {
